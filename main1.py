@@ -87,11 +87,18 @@ class Window(arcade.Window):
 
     def update(self, delta_time):
         self.bullet_list.update()
-        for Enemy in self.enemy_list:
-            hitlist = \
-            arcade.check_for_collision(self.enemy_list, self.bullet_list)
-            
-                
+        for e in self.enemy_list:
+            collisions = e.collides_with_list(self.bullet_list)
+            for c in collisions:
+                c.kill()
+                self.score += 10
+                e.hp -= 50
+            if e.hp <= 0:
+                e.kill()
+                self.score += 100
+            if self.score >= 600: 
+                sys.exit()
+
 
     def on_draw(self):
         arcade.start_render()
